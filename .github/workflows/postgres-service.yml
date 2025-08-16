@@ -30,8 +30,8 @@ jobs:
         run: |
           echo "Waiting for PostgreSQL to become ready..."
           for i in {1..30}; do
-            if nc -z localhost 5432; then
-              echo "PostgreSQL is ready!"
+            if pg_isready -h localhost -p 5432 -U testuser; then
+              echo "✅ PostgreSQL is ready!"
               break
             fi
             echo "Waiting... ($i)"
