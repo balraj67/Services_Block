@@ -39,4 +39,4 @@ jobs:
       - name: Confirm PostgreSQL is running
         run: |
           pg_isready -h localhost -p 5432 -U testuser || exit 1
-          echo "PostgreSQL service is running and reachable."
+          echo "PPostgreSQL service is ready."
