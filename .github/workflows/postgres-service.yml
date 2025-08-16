@@ -2,9 +2,12 @@ name: Service demo with PostgreSQL
 
 on:
   push:
+     branches:
+       - main
+     workflow_dispatch:
 
 jobs:
-  test:
+  postgres-check:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -21,9 +24,19 @@ jobs:
           --health-timeout=5s
           --health-retries=5
     steps:
-      - name: Check PostgreSQL Status
+      - name: Wait for PostgresSQL to be ready
         run: |
-          echo "Waiting for PostgreSQL to be ready..."
-          sleep 10
-      - name: Run Tests
-        run: echo "Running tests with PostgreSQL!"
+          echo "Waiting for PostgreSQL to become ready..."
+          for i in {1..30}; do
+            if nc -z localhost 5432; then
+              echo "PostgreSQL is ready!"
+              break
+            fi
+            echo "Waiting... ($i)"
+            sleep 1
+          done
+      
+      - name: Confirm PostgreSQL is running
+        run: |
+          pg_isready -h localhost -p 5432 -U testuser || exit 1
+          echo "PostgreSQL service is running and reachable."
