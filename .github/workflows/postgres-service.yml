@@ -29,7 +29,7 @@ jobs:
           echo "Waiting for PostgreSQL to become ready..."
           for i in {1..30}; do
             if nc -z localhost 5432; then
-              echo "PostgreSQL is ready!"
+              echo "PostgreSQL service is ready."
               break
             fi
             echo "Waiting... ($i)"
